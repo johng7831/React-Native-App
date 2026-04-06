@@ -1,98 +1,111 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
-
-export default function HomeScreen() {
+export default function ChurchHomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <View style={styles.heroCard}>
+        <Text style={styles.heroSubtitle}>Welcome to</Text>
+        <Text style={styles.heroTitle}>Grace Community Church</Text>
+      </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      <Text style={styles.sectionTitle}>This Sunday&apos;s Message</Text>
+      <View style={styles.videoCard}>
+        <View style={styles.playButton}>
+          <Text style={styles.playIcon}>▶</Text>
+        </View>
+      </View>
+
+      <Text style={styles.sectionTitle}>Upcoming Highlights</Text>
+      <View style={styles.highlightsRow}>
+        <View style={styles.highlightCard}>
+          <Text style={styles.highlightText}>Youth Night</Text>
+          <Text style={styles.highlightSubtext}>Fri 7:00 PM</Text>
+        </View>
+        <View style={styles.highlightCard}>
+          <Text style={styles.highlightText}>Prayer Night</Text>
+          <Text style={styles.highlightSubtext}>Wed 7:00 PM</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flex: 1,
+    backgroundColor: '#111926',
+  },
+  contentContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 58,
+    paddingBottom: 24,
+  },
+  heroCard: {
+    borderRadius: 14,
+    padding: 18,
+    backgroundColor: '#243040',
+    borderWidth: 1,
+    borderColor: '#2e3d4f',
+    marginBottom: 16,
+  },
+  heroSubtitle: {
+    color: '#d6dae0',
+    fontSize: 18,
+    textAlign: 'center',
+    marginBottom: 6,
+  },
+  heroTitle: {
+    color: '#f5f8ff',
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  sectionTitle: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+  },
+  videoCard: {
+    height: 145,
+    borderRadius: 14,
+    backgroundColor: '#b29e58',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 18,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  playButton: {
+    width: 62,
+    height: 62,
+    borderRadius: 31,
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  playIcon: {
+    color: '#1d2633',
+    fontSize: 28,
+    marginLeft: 4,
+  },
+  highlightsRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  highlightCard: {
+    flex: 1,
+    borderRadius: 12,
+    padding: 12,
+    backgroundColor: '#243040',
+    borderWidth: 1,
+    borderColor: '#2e3d4f',
+  },
+  highlightText: {
+    color: '#eef2ff',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  highlightSubtext: {
+    color: '#9aa7b9',
+    marginTop: 4,
   },
 });
