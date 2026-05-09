@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useRouter } from "expo-router";
 import axios from "axios";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Button, Text, TextInput, View } from "react-native";
 import { API_BASE_URL } from "./config/api";
 
@@ -18,7 +18,7 @@ export default function LoginScreen() {
         password,
       });
 
-      const token = response.data?.token;
+      const token = response.data?.data?.token || response.data?.token;
       if (!token) {
         throw new Error("Token missing from login response");
       }

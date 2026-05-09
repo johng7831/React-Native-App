@@ -1,18 +1,26 @@
-const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 
-let admin = {
-  email: "admin@gmail.com",
-  password: bcrypt.hashSync("1234", 8)
-};
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
 
-const getAdmin = () => admin;
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
 
-const updateAdmin = ({ email, password }) => {
-  admin = { email, password };
-  return admin;
-};
+    password: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = {
-  getAdmin,
-  updateAdmin
-};
+module.exports = mongoose.model("User", userSchema);

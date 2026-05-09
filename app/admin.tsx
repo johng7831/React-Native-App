@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useRouter } from "expo-router";
 import axios from "axios";
+import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -17,6 +17,7 @@ type AuthMode = "login" | "register";
 export default function AdminAuthScreen() {
   const router = useRouter();
   const [mode, setMode] = useState<AuthMode>("login");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,8 +26,12 @@ export default function AdminAuthScreen() {
   const isLogin = mode === "login";
 
   const handleSubmit = async () => {
-    if (!email || !password) {
-      setMessage("Please enter email and password");
+    if (!email || !password || (!isLogin && !name)) {
+      setMessage(
+        isLogin
+          ? "Please enter email and password"
+          : "Please enter name, email, and password"
+      );
       return;
     }
 
@@ -34,13 +39,15 @@ export default function AdminAuthScreen() {
     setMessage("");
 
     try {
-      if (isLogin) {
-        const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
-          email,
-          password,
-        });
+      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
+      const payload = isLogin
+        ? { email, password }
+        : { name: name.trim(), email, password };
 
-        const token = response.data?.token;
+      const response = await axios.post(`${API_BASE_URL}${endpoint}`, payload);
+
+      if (isLogin) {
+        const token = response.data?.data?.token || response.data?.token;
         if (!token) {
           throw new Error("Token missing");
         }
@@ -50,11 +57,8 @@ export default function AdminAuthScreen() {
           params: { token },
         });
       } else {
-        await axios.post(`${API_BASE_URL}/api/auth/register`, {
-          email,
-          password,
-        });
         setMessage("Registration successful. You can login now.");
+        setName("");
         setMode("login");
       }
     } catch (error) {
@@ -86,6 +90,15 @@ export default function AdminAuthScreen() {
           <Text style={[styles.switchText, !isLogin && styles.activeText]}>Register</Text>
         </Pressable>
       </View>
+
+      {!isLogin ? (
+        <TextInput
+          value={name}
+          onChangeText={setName}
+          placeholder="Name"
+          style={styles.input}
+        />
+      ) : null}
 
       <TextInput
         value={email}

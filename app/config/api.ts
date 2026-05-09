@@ -1,21 +1,26 @@
 import Constants from "expo-constants";
 import { Platform } from "react-native";
 
-const hostFromExpo = Constants.expoConfig?.hostUri?.split(":")[0];
+const hostUri = Constants.expoConfig?.hostUri;
+const host = hostUri?.split(":")[0];
 
 function resolveApiBaseUrl() {
+  // Use .env value if available
   if (process.env.EXPO_PUBLIC_API_URL) {
     return process.env.EXPO_PUBLIC_API_URL;
   }
 
-  if (hostFromExpo) {
-    return `http://${hostFromExpo}:5000`;
+  // Expo Go / local network
+  if (host) {
+    return `http://${host}:5000`;
   }
 
+  // Android emulator fallback
   if (Platform.OS === "android") {
     return "http://10.0.2.2:5000";
   }
 
+  // iOS simulator / web fallback
   return "http://localhost:5000";
 }
 
